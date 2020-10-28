@@ -1,6 +1,6 @@
 language: c
 env:
-  - TOOL_NAME=stern TOOL_VERSION=1.11.0 TOOL_TEST_COMMAND='stern --version'
+  - TOOL_NAME=stern TOOL_VERSION=1.12.1 TOOL_TEST_COMMAND='stern --version'
 before_script:
   - git clone https://github.com/asdf-vm/asdf.git
   - . asdf/asdf.sh

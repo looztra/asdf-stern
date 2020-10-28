@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/looztra/asdf-stern.svg?branch=master)](https://travis-ci.org/looztra/asdf-stern)
 
-[stern](https://github.com/wercker/stern/releases) plugin for the [asdf](https://github.com/asdf-vm/asdf) version manager.
+[stern](https://github.com/stern/stern/releases) plugin for the [asdf](https://github.com/asdf-vm/asdf) version manager.
 
 ## Install
 
