@@ -14,8 +14,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
-    - uses: actions/checkout@v2
-    - uses: asdf-vm/actions/plugin-test@v1
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Test asdf plugin
+      uses: asdf-vm/actions/plugin-test@v1
       with:
         command: stern --version
       env:
@@ -23,5 +25,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - run: ./shellcheck-on-linux-only.sh
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Shellcheck
+      run: |
+        which shellcheck
+        shellcheck -V
+        shellcheck bin/*
