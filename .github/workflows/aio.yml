@@ -32,7 +32,7 @@ jobs:
       - name: Run the sh-checker
         uses: luizm/action-sh-checker@v0.1.8
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Optional if sh_checker_comment is false.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           #SHELLCHECK_OPTS: -e SC1004 # Optional: exclude some shellcheck warnings.
           SHFMT_OPTS: -i 2 # Optional: pass arguments to shfmt.
         with:
