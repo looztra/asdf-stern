@@ -59,10 +59,10 @@ install_tool() {
 
   local platform
   local bin_install_path="$install_path/bin"
-  local binary_path="$bin_install_path/${binary_name}"
-  local binary_alt_path
+  local full_path_to_binary="$bin_install_path/${binary_name}"
+  local full_path_to_alt_binary
   if [[ -n "$binary_alt_name" || "$binary_alt_name" == "$NO_BINARY_ALTNAME" ]]; then
-    binary_alt_path="$bin_install_path/${binary_alt_name}"
+    full_path_to_alt_binary="$bin_install_path/${binary_alt_name}"
   fi
   local download_url
   local download_target_file
@@ -81,9 +81,9 @@ install_tool() {
   mkdir -p "${bin_install_path}"
 
   log INFO "Cleaning previous binaries if any"
-  rm -f "$binary_path" 2>/dev/null || true
+  rm -f "$full_path_to_binary" 2>/dev/null || true
   if [[ -n "$binary_alt_name" ]]; then
-    rm -f "$binary_alt_path" 2>/dev/null || true
+    rm -f "$full_path_to_alt_binary" 2>/dev/null || true
   fi
   if [[ "$downloaded_file_is_not_an_archive" != "true" ]]; then
     log INFO "Extracting archive"
@@ -92,14 +92,12 @@ install_tool() {
     log INFO "Preparing downloaded file"
     cp "$download_target_file" "$tmp_download_dir"
   fi
-  log INFO "Copying binary"
-  cp "$(get_binary_path_in_archive "${tmp_download_dir}" "${binary_name}" "${version}" "${platform}")" "${binary_path}"
-  chmod +x "${binary_path}"
-  log DEBUG "wtf?"
-  ls -l "${binary_path}"
+  log INFO "Copying binaries"
+  cp "$(get_binary_path_in_archive "${tmp_download_dir}" "${binary_name}" "${version}" "${platform}")" "${full_path_to_binary}"
+  chmod +x "${full_path_to_binary}"
   if [[ -n "$binary_alt_name" ]]; then
-    cp "${binary_path}" "${binary_alt_path}"
-    chmod +x "${binary_alt_path}"
+    cp "${full_path_to_binary}" "${full_path_to_alt_binary}"
+    chmod +x "${full_path_to_alt_binary}"
   fi
 }
 
