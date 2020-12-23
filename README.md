@@ -1,6 +1,6 @@
 # asdf-stern
 
-[![Build Status](https://travis-ci.org/looztra/asdf-stern.svg?branch=master)](https://travis-ci.org/looztra/asdf-stern)
+![AllInOne](https://github.com/looztra/asdf-stern/workflows/AllInOne/badge.svg)
 
 [stern](https://github.com/stern/stern/releases) plugin for the [asdf](https://github.com/asdf-vm/asdf) version manager.
 
