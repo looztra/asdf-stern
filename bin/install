@@ -5,6 +5,7 @@ set -o pipefail
 
 # https://github.com/stern/stern/releases/download/v1.12.1/stern_1.12.1_linux_amd64.tar.gz
 # https://github.com/stern/stern/releases/download/v1.12.1/stern_1.12.1_darwin_amd64.tar.gz
+
 readonly NO_BINARY_ALTNAME=@@UNDEFINED@@
 readonly g_github_coordinates=stern/stern
 readonly g_binary_name=stern
@@ -127,9 +128,7 @@ get_platform() {
 }
 
 get_platform_custom() {
-  #local operating_system
-  #operating_system=$(uname | tr '[:upper:]' '[:lower:]')
-  echo "not used"
+  echo "NOT USED"
 }
 
 get_platform_uname_c_x86_64() {
@@ -150,6 +149,7 @@ get_filename() {
   local binary_name="$3"
   local version_short
   version_short=$(get_version_short "$version")
+  #  log DEBUG "version=${version}, version_short=${version_short}, binary_name=${binary_name}, platform=${platform}"
 
   echo "$g_filename_template" |
     sed "s/__VERSION__/${version}/g;s/__VERSION_SHORT__/${version_short}/g;s/__BINARY_NAME__/${binary_name}/g;s/__PLATFORM__/${platform}/g"
@@ -163,6 +163,7 @@ get_download_url() {
   filename="$(get_filename "$version" "$platform" "$binary_name")"
   local version_short
   version_short=$(get_version_short "$version")
+  #  log DEBUG "version=${version}, binary_name=${binary_name}, platform=${platform}, filename=${filename}"
 
   echo "$g_download_url_template" |
     sed "s|__GITHUB_COORDINATES__|${g_github_coordinates}|g;s|__VERSION__|${version}|g;s|__VERSION_SHORT__|${version_short}|g;s|__FILENAME__|${filename}|g;"
