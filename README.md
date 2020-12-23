@@ -3,6 +3,10 @@
 ![AllInOne](https://github.com/looztra/asdf-stern/workflows/AllInOne/badge.svg)
 [![GitHub license](https://img.shields.io/github/license/looztra/asdf-stern?style=plastic)](https://github.com/looztra/asdf-stern/blob/master/LICENSE)
 
+## Build History
+
+[![Build history](https://buildstats.info/github/chart/looztra/asdf-stern?branch=master)](https://github.com/looztra/asdf-stern/actions)
+
 ## stern
 
 <https://github.com/stern/stern>
