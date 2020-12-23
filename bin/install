@@ -80,7 +80,7 @@ install_tool() {
   download_target_file="$download_sub_path_dir/"$(get_filename "$version" "$platform" "$binary_name")
 
   log INFO "Downloading [${binary_name}] from ${download_url} to ${download_target_file}"
-  curl -Lo "$download_target_file" "$download_url"
+  curl --location --output "$download_target_file" "$download_url"
 
   log INFO "Creating bin directory [${bin_install_path}]"
   mkdir -p "${bin_install_path}"
