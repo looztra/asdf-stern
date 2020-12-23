@@ -49,7 +49,7 @@ function log() {
 }
 
 install_tool() {
-  #local install_type=$1
+  local install_type=$1
   local version=$2
   local install_path=$3
   local tmp_download_dir=$4
@@ -67,6 +67,10 @@ install_tool() {
   local download_url
   local download_target_file
   local download_sub_path_dir
+
+  if [[ "$install_type" != "version" ]]; then
+    log ERROR "Install of type [$install_type] not supported"
+  fi
 
   platform=$(get_platform)
   download_url=$(get_download_url "$version" "$platform" "$binary_name")
