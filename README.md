@@ -1,6 +1,7 @@
 # asdf-stern
 
-[![GitHub Actions Status](https://github.com/looztra/stern/workflows/All%20In%20One/badge.svg?branch=master)](https://github.com/looztra/stern/actions)
+![AllInOne](https://github.com/looztra/asdf-stern/workflows/AllInOne/badge.svg)
+
 [stern](https://github.com/stern/stern/releases) plugin for the [asdf](https://github.com/asdf-vm/asdf) version manager.
 
 ## Install
