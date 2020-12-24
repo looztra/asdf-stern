@@ -7,19 +7,21 @@ set -o pipefail
 # https://github.com/stern/stern/releases/download/v1.12.1/stern_1.12.1_darwin_amd64.tar.gz
 
 readonly NO_BINARY_ALTNAME=@@UNDEFINED@@
+# shellcheck disable=SC2034
 readonly g_github_coordinates=stern/stern
 readonly g_binary_name=stern
 readonly g_binary_altname="$NO_BINARY_ALTNAME"
 #
-# __VERSION__/__VERSION_SHORT__/__BINARY_NAME__/__PLATFORM__
+# available : __VERSION__/__VERSION_SHORT__/__BINARY_NAME__/__PLATFORM__
 #
 readonly g_filename_template=__BINARY_NAME_____VERSION_____PLATFORM__.tar.gz
 #
-# __GITHUB_COORDINATES__/__VERSION__/__VERSION_SHORT__/__FILENAME__
+# available : __GITHUB_COORDINATES__/__VERSION__/__VERSION_SHORT__/__FILENAME__
 #
+# shellcheck disable=SC2034
 readonly g_download_url_template=https://github.com/__GITHUB_COORDINATES__/releases/download/v__VERSION__/__FILENAME__
 #
-# __ARCHIVE_DIR__/__BINARY_NAME__/__VERSION__/__VERSION_SHORT__/__PLATFORM__
+# available : __ARCHIVE_DIR__/__BINARY_NAME__/__VERSION__/__VERSION_SHORT__/__PLATFORM__
 #
 readonly g_binary_path_in_archive_template=__ARCHIVE_DIR__/__BINARY_NAME_____VERSION_____PLATFORM__/__BINARY_NAME__
 readonly g_downloaded_file_is_not_an_archive=false
@@ -47,6 +49,33 @@ function log() {
   else
     echo "$line"
   fi >&2
+}
+
+# from https://stackoverflow.com/questions/4023830/how-to-compare-two-strings-in-dot-separated-version-format-in-bash
+function vercomp() {
+  if [[ "$1" == "$2" ]]; then
+    return 0
+  fi
+  local IFS=.
+  # shellcheck disable=SC2206
+  local i ver1=($1) ver2=($2)
+  # fill empty fields in ver1 with zeros
+  for ((i = ${#ver1[@]}; i < ${#ver2[@]}; i++)); do
+    ver1[i]=0
+  done
+  for ((i = 0; i < ${#ver1[@]}; i++)); do
+    if [[ -z ${ver2[i]} ]]; then
+      # fill empty fields in ver2 with zeros
+      ver2[i]=0
+    fi
+    if ((10#${ver1[i]} > 10#${ver2[i]})); then
+      return 1
+    fi
+    if ((10#${ver1[i]} < 10#${ver2[i]})); then
+      return 2
+    fi
+  done
+  return 0
 }
 
 install_tool() {
@@ -159,17 +188,17 @@ get_download_url() {
   local version="$1"
   local platform="$2"
   local binary_name="$3"
+
   local filename
   filename="$(get_filename "$version" "$platform" "$binary_name")"
   local version_short
   version_short=$(get_version_short "$version")
   #  log DEBUG "version=${version}, binary_name=${binary_name}, platform=${platform}, filename=${filename}"
-
   echo "$g_download_url_template" |
     sed "s|__GITHUB_COORDINATES__|${g_github_coordinates}|g;s|__VERSION__|${version}|g;s|__VERSION_SHORT__|${version_short}|g;s|__FILENAME__|${filename}|g;"
-
 }
 
+#
 readonly _tmp_download_dir="$(mktemp -d -t 'asdf_XXXXXXXX')"
 trap 'rm -rf "${_tmp_download_dir}"' EXIT
 install_tool "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH" "$_tmp_download_dir" "$g_binary_name" "$g_binary_altname" "$g_downloaded_file_is_not_an_archive"
