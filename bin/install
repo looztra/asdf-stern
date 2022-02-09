@@ -23,7 +23,8 @@ readonly g_download_url_template=https://github.com/__GITHUB_COORDINATES__/relea
 #
 # available : __ARCHIVE_DIR__/__BINARY_NAME__/__VERSION__/__VERSION_SHORT__/__PLATFORM__
 #
-readonly g_binary_path_in_archive_template=__ARCHIVE_DIR__/__BINARY_NAME_____VERSION_____PLATFORM__/__BINARY_NAME__
+readonly g_binary_path_in_archive_template_old=__ARCHIVE_DIR__/__BINARY_NAME_____VERSION_____PLATFORM__/__BINARY_NAME__ # for v1.0.0 ~ v1.20.x
+readonly g_binary_path_in_archive_template=__ARCHIVE_DIR__/__BINARY_NAME__                                              # for v1.21.0 or later
 readonly g_downloaded_file_is_not_an_archive=false
 readonly g_platform_pattern=uname_l_underscore_amd64 # one of uname_c_x86_64|uname_l_dash_amd64|uname_l_underscore_amd64|custom
 
@@ -148,8 +149,19 @@ get_binary_path_in_archive() {
   local version_short
   version_short=$(get_version_short "$version")
 
+  if [ "${version_short%%.*}" -eq 1 ]; then
+    local minor_patch_version="${version_short#*.}"
+    local minor_version="${minor_patch_version%.*}"
+    if [ "$minor_version" -le 20 ]; then
+      # v1.0.0 ~ v1.20.x
+      echo $g_binary_path_in_archive_template_old |
+        sed "s|__ARCHIVE_DIR__|${archive_dir}|g;s|__BINARY_NAME__|${binary_name}|g;s|__VERSION__|${version}|g;s|__VERSION_SHORT__|${version_short}|g;s|__PLATFORM__|${platform}|g;"
+      return 0
+    fi
+  fi
+
   echo $g_binary_path_in_archive_template |
-    sed "s|__ARCHIVE_DIR__|${archive_dir}|g;s|__BINARY_NAME__|${binary_name}|g;s|__VERSION__|${version}|g;s|__VERSION_SHORT__|${version_short}|g;s|__PLATFORM__|${platform}|g;"
+    sed "s|__ARCHIVE_DIR__|${archive_dir}|g;s|__BINARY_NAME__|${binary_name}|g;"
 }
 
 get_platform() {
